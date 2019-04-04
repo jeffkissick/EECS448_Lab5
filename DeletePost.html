@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>View Posts!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <form action='DeletePost.php' method ="post">
+      <?php 
+
+      $dbhost = 'mysql.eecs.ku.edu';
+      $dbuser = 'jkissick';
+      $dbpass = 'AhVid7ie';
+      $dbname = 'jkissick';
+      
+      $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+      
+      // should return true if the username has been declared, found here https://www.php.net/manual/en/function.isset.php
+      // listen for the post then set the value
+      if(isset($_POST["username"]))
+      {
+          $uname=$_POST["username"];
+      }
+      
+      if($conn->connect_errno) // if conn returns an error code, found on php.net
+      {
+         die('Could not connect: ' . $conn->connect_errno);
+      }
+      
+      //echo 'Connected successfully!<br>';
+      
+      $qry2 = 'SELECT author_id, content, post_id FROM Posts';
+      
+      if($result = $conn->query($qry2))
+      {
+          echo "<br><br><table class=table>";
+          echo "<tr> <td><b>Form Data<b></td> </tr>";
+          while($row = $result->fetch_assoc())
+          {
+              
+            echo "<tr><td>" . $row["author_id"] . "</td><td>" . $row["content"] . 
+            "</td><td><input name = 'data[]' type='checkbox' value='".$row["post_id"]."'></td></tr>";
+          }
+          echo "</table>";
+          $result->free();
+       }
+      
+      $conn->close();
+        
+
+      ?>
+    <br><br>
+    <input type="submit" value="THE MOD HAMMER">
+    </form>
+  </body>
+</html>
